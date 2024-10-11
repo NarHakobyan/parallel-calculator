@@ -1,12 +1,15 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Body, Controller, Post } from '@nestjs/common';
+import { CalculatorService } from './calculator.service';
+import { EvaluateExpressionDto } from './EvaluateExpressionDto';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly calculatorService: CalculatorService) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @Post('evaluate')
+  getHello(@Body() evaluateExpressionDto: EvaluateExpressionDto) {
+    return this.calculatorService.evaluateExpression(
+      evaluateExpressionDto.expression,
+    );
   }
 }
