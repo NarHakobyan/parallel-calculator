@@ -93,7 +93,8 @@ function evaluatePostfix(postfix: string[]): number {
   return stack.pop();
 }
 
-parentPort.on('message', ({ expression, id }) => {
+parentPort.on('message', (data: { expression: string; id: string }) => {
+  const { expression, id } = data;
   const postfix = infixToPostfix(expression.replace(/\s+/g, ''));
   const result = evaluatePostfix(postfix);
 
