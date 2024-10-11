@@ -18,7 +18,6 @@ async function bootstrap() {
       whitelist: true,
       errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
       transform: true,
-      dismissDefaultMessages: true,
       exceptionFactory: (errors) => new UnprocessableEntityException(errors),
     }),
   );

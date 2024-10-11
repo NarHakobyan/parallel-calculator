@@ -2,6 +2,7 @@ import {
   Injectable,
   OnApplicationBootstrap,
   OnApplicationShutdown,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { join } from 'path';
 import { Worker } from 'worker_threads';
@@ -27,13 +28,13 @@ export class CalculatorService
     await this.worker.terminate();
   }
 
-  evaluateExpression(expression: string): Promise<number> {
+  async evaluateExpression(expression: string): Promise<number> {
     const uniqueId = randomUUID(); // Generating a unique ID for the task
     // Sending a message to the worker thread with the input number and unique ID
     this.worker.postMessage({ expression, id: uniqueId });
 
     // Returning a promise that resolves with the result of the Fibonacci calculation
-    return firstValueFrom(
+    const value = await firstValueFrom(
       // Convert the observable to a promise
       this.messages$.pipe(
         // Filter messages to only include those with the matching unique ID
@@ -42,5 +43,11 @@ export class CalculatorService
         map(({ result }) => result),
       ),
     );
+
+    if (value == null || Number.isNaN(value)) {
+      throw new UnprocessableEntityException('Invalid expression');
+    }
+
+    return value;
   }
 }

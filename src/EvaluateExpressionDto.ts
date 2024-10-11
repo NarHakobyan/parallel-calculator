@@ -1,8 +1,9 @@
 import { Expose } from 'class-transformer';
-import { IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class EvaluateExpressionDto {
   @Expose()
   @IsString()
+  @IsNotEmpty()
   expression: string;
 }
