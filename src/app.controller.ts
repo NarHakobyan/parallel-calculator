@@ -7,9 +7,15 @@ export class AppController {
   constructor(private readonly calculatorService: CalculatorService) {}
 
   @Post('evaluate')
-  getHello(@Body() evaluateExpressionDto: EvaluateExpressionDto) {
-    return this.calculatorService.evaluateExpression(
+  async evaluateExpression(
+    @Body() evaluateExpressionDto: EvaluateExpressionDto,
+  ) {
+    const result = await this.calculatorService.evaluateExpression(
       evaluateExpressionDto.expression,
     );
+
+    return {
+      result,
+    };
   }
 }
